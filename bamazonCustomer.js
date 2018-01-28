@@ -57,7 +57,7 @@ const buyProduct = ()=> {
                 let productName = data[0].product_name;
                 if (unitsBought <= stockQuantity) {
                     console.log("Purchase Complete!");
-                    //run update function
+                    updateDataBase(productID, unitsBought, stockQuantity, price, productName);
                 }
                 else {
                     console.log("Insufficient Quantity!");
@@ -66,11 +66,20 @@ const buyProduct = ()=> {
         });
 }
 
-const updateDataBase = () => {
-    let query = 'UPDATE products SET ? WHERE ?';
-    connection.query(query, 
-}
-
+const updateDataBase = (id, bought, stock, price, name) => {
+    console.log("running update function");
+    var query = connection.query('UPDATE products SET ? WHERE ?',
+    [
+        {
+            stock_quantity: stock - bought
+        },
+        {
+            itemID: id
+        }
+    ],
+        function (err, res) {
+            if (err) throw err;
+        });
 }
 
 
