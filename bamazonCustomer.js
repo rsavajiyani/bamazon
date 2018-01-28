@@ -1,5 +1,6 @@
 const mysql = require('mysql');
 const inquirer = require('inquirer'); 
+const Table = require('cli-table');
 
 const connection = mysql.createConnection({
 	host: 'localhost',
@@ -12,7 +13,7 @@ const connection = mysql.createConnection({
 connection.connect((err) => {
 	if (err) throw err;
     console.log('connected as id ' + connection.threadId);
-    displayTable();
+    // displayTable();
 	buyProduct();
 });
 
@@ -21,6 +22,13 @@ const displayTable = () => {
     connection.query(query, (error, data) => {
         if (error) throw error;
         console.log(data);
+        const table = new Table({
+            head: ['Product ID', 'Product Name', 'Department Name', 'Price', 'Stock Quantity']
+        });
+        // for (var i = 0; i < data.length; i++) {
+        //     table.push(data[i].product_name);
+        // }
+        console.log("this is the table:\n" + table);
     });
 }
 
@@ -39,14 +47,30 @@ const buyProduct = ()=> {
             }
         ]).then((input) => {
             let productID = input.id;
-            // let unitsBought = input.units;
+            let unitsBought = input.units;
             let query = 'SELECT product_name, price, stock_quantity FROM products WHERE itemID=?';
             connection.query(query, [input.id], (error, data) => {
                 if (error) throw error;
                 console.log(data);
-
+                let stockQuantity = data[0].stock_quantity;
+                let price = data[0].price;
+                let productName = data[0].product_name;
+                if (unitsBought <= stockQuantity) {
+                    console.log("Purchase Complete!");
+                    //run update function
+                }
+                else {
+                    console.log("Insufficient Quantity!");
+                }
             });
         });
+}
+
+const updateDataBase = () => {
+    let query = 'UPDATE products SET ? WHERE ?';
+    connection.query(query, 
+}
+
 }
 
 
