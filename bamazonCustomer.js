@@ -13,22 +13,28 @@ const connection = mysql.createConnection({
 connection.connect((err) => {
 	if (err) throw err;
     console.log('connected as id ' + connection.threadId);
-    // displayTable();
-	buyProduct();
+    displayTable();
 });
 
 const displayTable = () => {
     let query = 'SELECT * FROM products';
     connection.query(query, (error, data) => {
         if (error) throw error;
-        console.log(data);
-        const table = new Table({
-            head: ['Product ID', 'Product Name', 'Department Name', 'Price', 'Stock Quantity']
-        });
-        // for (var i = 0; i < data.length; i++) {
+        console.log('Product ID || Product Name || Department Name || Price || Stock Quantity');
+        for (var i = 0; i <data.length; i++) {
+            console.log(data[i].itemID + " || " + data[i].product_name + 
+                " || " + data[i].department_name + " || " + data[i].price +
+                " || " + data[i].stock_quantity);
+        }
+        buyProduct();
+        // console.log(data[0].product_name);
+        // const table = new Table({
+        //      head: ['Product ID', 'Product Name', 'Department Name', 'Price', 'Stock Quantity']
+        // });
+        //  for (var i = 0; i < data.length; i++) {
         //     table.push(data[i].product_name);
-        // }
-        console.log("this is the table:\n" + table);
+        //  }
+        //  console.log("this is the table:\n" + table);
     });
 }
 
@@ -79,6 +85,7 @@ const updateDataBase = (id, bought, stock, price, name) => {
     ],
         function (err, res) {
             if (err) throw err;
+            displayTable();
         });
 }
 
