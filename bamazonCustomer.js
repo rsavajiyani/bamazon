@@ -33,6 +33,7 @@ const buyProduct = () => {
                 name: "id",
                 message: "What is the ID of the product you would like to buy? Press Enter Twice To Exit",
             },
+            //refactor this into second inquirer/prompt in order to add input validation;
             {
                 type: "input",
                 name: "units",
@@ -40,6 +41,8 @@ const buyProduct = () => {
             }
         ]).then((input) => {
             let productID = input.id;
+
+            //move this to new/separate inquirer so that user can quit after first question 
             if (productID.length == 0) {
                  process.exit();
             }
